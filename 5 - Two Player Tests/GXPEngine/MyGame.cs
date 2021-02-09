@@ -22,8 +22,13 @@ public class MyGame : Game
 
     void Update()
 	{
-		
+		updateScale();
 	}
+
+	private void updateScale()
+    {
+		scale = _level.PlayerDistance();
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{

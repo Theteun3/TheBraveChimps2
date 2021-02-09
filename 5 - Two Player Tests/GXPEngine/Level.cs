@@ -13,6 +13,7 @@ class Level : GameObject
     {
         _levelName = levelName;
         generateLevel(_levelName);
+
     }
 
     private void generateLevel(string levelName)
@@ -48,10 +49,26 @@ class Level : GameObject
     {
         if (_player1 != null)
         {
-            if (_player2 != null) x = -Math.Max(_player1.x, _player2.x) + game.width;
-            else x = -_player1.x + game.width / 2;
-            y = Mathf.Clamp(-_player1.y + game.height / 2, -600, 0);
+            if (_player2 != null)
+            {
+                float frontPlayerX = -Math.Max(_player1.x, _player2.x) + game.width / 2 / game.scale;
+                x = Mathf.Clamp(frontPlayerX, -5760 + (game.width / game.scale), 0);
+            }
+            else x = -_player1.x + game.width / 2 / game.scale;
+            y = Mathf.Clamp(-_player1.y + game.height / 2 / game.scale, -500, 0);
         }
+       
+    }
+
+    public float PlayerDistance()
+    {
+        float distance = Math.Abs(_player1.x - _player2.x) / 12000;
+        float scale = 0.5f - distance;
+
+        if (_player1 != null && _player2 != null && scale > 0.4f) return scale;
+        else if (_player1 != null && _player2 != null) return 0.4f;
+        else if (_player1 != null) return 0.5f;
+        else return .6f;
     }
 }
 

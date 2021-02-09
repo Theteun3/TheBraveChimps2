@@ -4,10 +4,12 @@ using TiledMapParser;
 
 class Player : Sprite
 {
-    public const float MOVEMENTSPEED = 0.8f;
+    public const float MOVEMENTSPEED = 1f;
     public const float JUMPFORCE = .5f;
     public const float JUMPHEIGHT = -0.6f;
     private const float GRAVITY = 0.02f;
+    private const float LEFT = -.5f;
+    private const float RIGHT = .5f;
 
     public float speedX;
     public float speedY;
@@ -16,9 +18,15 @@ class Player : Sprite
 
     private float _deltaY;
 
+    private Sprite RocketLauncher;
+
     public Player() : base("SpriteSheets/PlayerCollision.png")
     {
         SetOrigin(width / 2, height / 2);
+        RocketLauncher = new Sprite("Sprites/Rocketlauncher.png", false, false);
+        RocketLauncher.scale = 6;
+        RocketLauncher.y = -height / 4;
+        AddChild(RocketLauncher);
     }
 
     public void HandlePlayerStuff()
@@ -26,18 +34,24 @@ class Player : Sprite
         float oldY = y;
 
         handleGravity();
+        handleFacing();
         handleMovement();
 
         _deltaY = y - oldY;
     }
 
+    private void handleFacing()
+    {
+        if (speedX < 0) scaleX = LEFT;
+        else scaleX = RIGHT;
+    }
 
     private void handleMovement()
     {
         MoveUntilCollision(speedX * Time.deltaTime, 0);
         MoveUntilCollision(0, speedY * Time.deltaTime);
 
-        speedX *= .9f;
+        speedX *= .8f;
         if (_deltaY == 0)
         {
             speedY = 0;

@@ -80,5 +80,6 @@
     <Compile Include="Player.cs" />
     <Compile Include="Player1.cs" />
     <Compile Include="Player2.cs" />
+    <Compile Include="Rocket.cs" />
   </ItemGroup>
 </Project>

@@ -30,7 +30,7 @@ class Player1 : Player
 
     private void handleJump()
     {
-        if (Input.GetKeyDown(Key.SPACE) && !isJumping && isGrounded)
+        if (Input.GetKeyDown(Key.W) && !isJumping && isGrounded)
         {
             isJumping = true;
         }
