@@ -7,10 +7,11 @@ public class MyGame : Game
 
 	private Level _level;
 
-	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
+	public MyGame() : base(800, 600, false, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
 		loadLevel("PrototypeMap.tmx");
 		scale = 0.5f;
+		targetFps = 60;
     }
 
 	private void loadLevel(string level)

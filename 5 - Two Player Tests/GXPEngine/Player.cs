@@ -6,7 +6,7 @@ class Player : Sprite
 {
     public const float MOVEMENTSPEED = 0.8f;
     public const float JUMPFORCE = .5f;
-    public const int JUMPHEIGHT = -1;
+    public const float JUMPHEIGHT = -0.6f;
     private const float GRAVITY = 0.02f;
 
     public float speedX;
