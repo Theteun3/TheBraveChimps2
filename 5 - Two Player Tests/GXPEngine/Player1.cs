@@ -5,6 +5,7 @@ class Player1 : Player
 {
 
     private Level _level;
+    private AnimationSprite _graphics;
 
     private float _rocketTimer;
     private int _rocketCooldown = 1;
@@ -14,7 +15,11 @@ class Player1 : Player
     public Player1(TiledObject obj) : base()
     {
         _time = obj.GetIntProperty("Time", 100);
-        
+        _graphics = new AnimationSprite("SpriteSheets/Player1.png", 8, 2, -1, false, false);
+        _graphics.scaleX = 1;
+        _graphics.x = -width;
+        _graphics.y = -height * 1.25f;
+        AddChild(_graphics);
     }
 
     public void AddParents(Level l)
@@ -28,6 +33,31 @@ class Player1 : Player
         HandlePlayerStuff();
         handleInput();
         handleShooting();
+        handleAnimation();
+    }
+
+    private void handleAnimation()
+    {
+        switch (playerState)
+        {
+            case State.IDLE:
+                _graphics.SetCycle(0, 1);
+                break;
+
+            case State.WALKING:
+                _graphics.SetCycle(8, 8, 8);
+                break;
+
+            case State.RUNNING:
+                _graphics.SetCycle(1, 7, (byte)(16 / runSpeed));
+                break;
+
+            case State.JUMPING:
+                _graphics.SetCycle(0, 1);
+                break;
+        }
+
+        _graphics.Animate();
     }
 
     private void handleShooting()
@@ -43,27 +73,30 @@ class Player1 : Player
             _level.CreateRocket(this, rot);
         }
 
-        if (_rocketTimer > 0) _rocketTimer -= .032f;;
+        if (_rocketTimer > 0) _rocketTimer -= .032f; ;
     }
 
     private void handleInput()
     {
-        speedX = MOVEMENTSPEED;
+
 
         if (Input.GetKeyDown(Key.D) || Input.GetKeyUp(Key.D))
         {
             runSpeed = 1;
         }
 
-        if (Input.GetKey(Key.D) && runSpeed < 3)
-        {
-            runSpeed += .1f;
-        }
-
         if (Input.GetKey(Key.A))
         {
             speedX = -MOVEMENTSPEED;
         }
+
+        if (Input.GetKey(Key.D))
+        {
+            speedX = MOVEMENTSPEED;
+            if (runSpeed < 3) runSpeed += .07f;
+        }
+
+
     }
 
     private void handleJump()

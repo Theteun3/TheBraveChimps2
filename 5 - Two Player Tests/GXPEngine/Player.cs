@@ -8,8 +8,11 @@ class Player : Sprite
     public const float JUMPFORCE = .5f;
     public const float JUMPHEIGHT = -1.6f;
     private const float GRAVITY = 0.08f;
-    private const float LEFT = -.5f;
-    private const float RIGHT = .5f;
+    private const float LEFT = -1f;
+    private const float RIGHT = 1f;
+    
+    public enum State { IDLE, WALKING, RUNNING, JUMPING };
+    public State playerState = State.IDLE;
 
     public float speedX;
     public float speedY;
@@ -23,11 +26,11 @@ class Player : Sprite
 
     private Sprite RocketLauncher;
 
-    public Player() : base("SpriteSheets/PlayerCollision.png")
+    public Player() : base("SpriteSheets/PlayerCollisionT.png")
     {
         SetOrigin(width / 2, height / 2);
         RocketLauncher = new Sprite("Sprites/Rocketlauncher.png", false, false);
-        RocketLauncher.scale = 6;
+        RocketLauncher.scale = 3;
         RocketLauncher.y = -height / 4;
         AddChild(RocketLauncher);
     }
@@ -36,6 +39,7 @@ class Player : Sprite
     {
         float oldY = y;
 
+        handleStates();
         handleGravity();
         handleFacing();
         handleMovement();
@@ -43,6 +47,17 @@ class Player : Sprite
         
 
         _deltaY = y - oldY;
+
+        Console.WriteLine(_deltaY);
+    }
+
+    private void handleStates()
+    {
+        if ((speedX < 0.1 && speedX > -0.1)) playerState = State.IDLE;
+        else if (runSpeed < 1.5) playerState = State.WALKING;
+        else playerState = State.RUNNING;
+
+        if (_deltaY < 0) playerState = State.JUMPING;
     }
 
     private void handleFacing()
@@ -56,7 +71,7 @@ class Player : Sprite
         MoveUntilCollision(speedX * Time.deltaTime * runSpeed, 0);
         MoveUntilCollision(0, speedY * Time.deltaTime);
 
-        speedX *= .8f;
+        speedX *= .93f;
         if (_deltaY == 0)
         {
             speedY = 0;

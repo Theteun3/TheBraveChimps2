@@ -4,7 +4,7 @@ using GXPEngine;
 
 class Rocket : AnimationSprite
 {
-    private float _speed = 2f;
+    private float _speed = 3f;
     private bool _isExploding;
     private Player _player;
 

@@ -10,10 +10,19 @@ public class MyGame : Game
 
 	public float gameTime;
 
-	public MyGame() : base(800, 600, false, false)		// Create a window that's 800x600 and NOT fullscreen
+	private string _currentLevel;
+
+	private string[] levelName = new string[3]
+	{
+		"TitleScreen.tmx",
+		"SingleplayerPrototype.tmx",
+		"PrototypeMap.tmx"
+	};
+
+	public MyGame() : base(1920, 1080, false, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
 		_hud = new HUD();
-		loadLevel("SingleplayerPrototype.tmx");
+		LoadLevel(levelName[0]);
 		scale = 0.5f;
 		targetFps = 60;
     }
@@ -23,10 +32,12 @@ public class MyGame : Game
 		return _level;
     }
 
-	private void loadLevel(string level)
+	public void LoadLevel(string level)
     {
+		_currentLevel = level;
+		if (_level != null) _level.LateDestroy();
 		_hud.LateDestroy();
-		_level = new Level(level);
+		_level = new Level(_currentLevel);
 		_hud = new HUD();
 		LateAddChild(_level);
 		LateAddChild(_hud);

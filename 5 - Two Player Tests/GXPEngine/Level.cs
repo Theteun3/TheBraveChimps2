@@ -1,5 +1,6 @@
 ﻿using System;
 using GXPEngine;
+using GXPEngine.OpenGL;
 using TiledMapParser;
 
 
@@ -25,6 +26,7 @@ class Level : GameObject
         level.autoInstance = true;
 
         level.LoadTileLayers(0);
+        level.LoadImageLayers();
         level.addColliders = true;
         for (int layers = 1; layers < level.NumTileLayers - 1; layers++)
         {
@@ -48,6 +50,12 @@ class Level : GameObject
             _player2 = player2;
             player2.AddParents(this);
         }
+
+        if (sprite is Finish finish && _player1 != null)
+        {
+            if (_player2 != null) finish.AddPlayer(_player1, _player2);
+            else finish.AddPlayer(_player1);
+        }
     }
 
     private void Update()
@@ -59,6 +67,10 @@ class Level : GameObject
             {
                 killPlayer();
             }
+        }
+        else
+        {
+            GL.glfwEnable(GL.GLFW_MOUSE_CURSOR);
         }
     }
 
@@ -85,7 +97,7 @@ class Level : GameObject
             else return 0.4f;
         }
         else if (_player1 != null) return 0.5f;
-        else return .6f;
+        else return 1f;
     }
 
     private void killPlayer()
