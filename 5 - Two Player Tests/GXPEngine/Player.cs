@@ -4,10 +4,10 @@ using TiledMapParser;
 
 class Player : Sprite
 {
-    public const float MOVEMENTSPEED = 1f;
+    public const float MOVEMENTSPEED = 1.2f;
     public const float JUMPFORCE = .5f;
-    public const float JUMPHEIGHT = -0.6f;
-    private const float GRAVITY = 0.02f;
+    public const float JUMPHEIGHT = -1.2f;
+    private const float GRAVITY = 0.08f;
     private const float LEFT = -.5f;
     private const float RIGHT = .5f;
 
@@ -37,6 +37,8 @@ class Player : Sprite
         handleFacing();
         handleMovement();
 
+        
+
         _deltaY = y - oldY;
     }
 
@@ -58,6 +60,11 @@ class Player : Sprite
             isGrounded = true;
         }
         else isGrounded = false;
+    }
+
+    public float Facing()
+    {
+        return scaleX;
     }
 
 

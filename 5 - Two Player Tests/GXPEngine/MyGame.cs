@@ -6,18 +6,28 @@ public class MyGame : Game
 {
 
 	private Level _level;
+	private HUD _hud;
 
 	public MyGame() : base(800, 600, false, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
+		_hud = new HUD();
 		loadLevel("PrototypeMap.tmx");
 		scale = 0.5f;
 		targetFps = 60;
     }
 
+	public GameObject GetLevel()
+    {
+		return _level;
+    }
+
 	private void loadLevel(string level)
     {
+		_hud.LateDestroy();
 		_level = new Level(level);
-		AddChild(_level);
+		_hud = new HUD();
+		LateAddChild(_level);
+		LateAddChild(_hud);
     }
 
     void Update()

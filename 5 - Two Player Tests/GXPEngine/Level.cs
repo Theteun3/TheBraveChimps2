@@ -9,6 +9,8 @@ class Level : GameObject
     private Player1 _player1;
     private Player2 _player2;
 
+
+
     public Level(string levelName) : base()
     {
         _levelName = levelName;
@@ -38,10 +40,12 @@ class Level : GameObject
         if (sprite is Player1 player1)
         {
             _player1 = player1;
+            _player1.AddParents(this);
         }
         if (sprite is Player2 player2)
         {
             _player2 = player2;
+            player2.AddParents(this);
         }
     }
 
@@ -57,7 +61,9 @@ class Level : GameObject
             else x = -_player1.x + game.width / 2 / game.scale;
             y = Mathf.Clamp(-_player1.y + game.height / 2 / game.scale, -500, 0);
         }
-       
+
+
+        
     }
 
     public float PlayerDistance()
@@ -69,6 +75,16 @@ class Level : GameObject
         else if (_player1 != null && _player2 != null) return 0.4f;
         else if (_player1 != null) return 0.5f;
         else return .6f;
+    }
+
+
+    public void CreateRocket(Player p, int direction)
+    {
+        float side;
+        if (direction < 0) side = p.x - p.width;
+        else side = p.x + p.width;
+        Rocket rocket = new Rocket(side, p.y - p.height / 2, p, direction);
+        AddChild(rocket);
     }
 }
 

@@ -3,9 +3,20 @@ using GXPEngine;
 using TiledMapParser;
 class Player1 : Player
 {
+
+    private Level _level;
+
+    private float _rocketTimer;
+    private int _rocketCooldown = 1;
+
     public Player1(TiledObject obj) : base()
     {
         
+    }
+
+    public void AddParents(Level l)
+    {
+        _level = l;
     }
 
     private void Update()
@@ -13,6 +24,23 @@ class Player1 : Player
         handleJump();
         HandlePlayerStuff();
         handleInput();
+        handleShooting();
+    }
+
+    private void handleShooting()
+    {
+        int rot;
+        if (scaleX > 0) rot = 0;
+        else rot = -180;
+
+
+        if (Input.GetKeyDown(Key.SPACE) && _rocketTimer <= 0)
+        {
+            _rocketTimer = _rocketCooldown;
+            _level.CreateRocket(this, rot);
+        }
+
+        if (_rocketTimer > 0) _rocketTimer -= .032f;;
     }
 
     private void handleInput()
