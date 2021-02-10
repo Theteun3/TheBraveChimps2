@@ -25,8 +25,6 @@ class Rocket : AnimationSprite
         MoveUntilCollision(_speed * Time.deltaTime,0);
         float dX = oldX - x;
 
-        Console.WriteLine(y);
-
         if (dX == 0 )
         {
             Explode();

@@ -34,7 +34,7 @@ class Player2 : Player
         else rot = -180;
 
 
-        if (Input.GetKeyDown(Key.NUMPAD_5) && _rocketTimer <= 0)
+        if (Input.GetMouseButtonDown(0) && _rocketTimer <= 0)
         {
             _rocketTimer = _rocketCooldown;
             _level.CreateRocket(this, rot);

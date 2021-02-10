@@ -4,19 +4,22 @@ using TiledMapParser;
 
 class Player : Sprite
 {
-    public const float MOVEMENTSPEED = 1.2f;
+    public const float MOVEMENTSPEED = .6f;
     public const float JUMPFORCE = .5f;
-    public const float JUMPHEIGHT = -1.2f;
+    public const float JUMPHEIGHT = -1.6f;
     private const float GRAVITY = 0.08f;
     private const float LEFT = -.5f;
     private const float RIGHT = .5f;
 
     public float speedX;
     public float speedY;
+    public float runSpeed = 1f;
     public bool isJumping;
     public bool isGrounded;
 
     private float _deltaY;
+    private int _health = 3;
+    
 
     private Sprite RocketLauncher;
 
@@ -50,7 +53,7 @@ class Player : Sprite
 
     private void handleMovement()
     {
-        MoveUntilCollision(speedX * Time.deltaTime, 0);
+        MoveUntilCollision(speedX * Time.deltaTime * runSpeed, 0);
         MoveUntilCollision(0, speedY * Time.deltaTime);
 
         speedX *= .8f;
@@ -71,6 +74,17 @@ class Player : Sprite
     private void handleGravity()
     {
         speedY += GRAVITY;
+    }
+
+    public void TakeDamage()
+    {
+        _health--;
+
+        if (_health <= 0)
+        {
+            Console.WriteLine("A player has been killed");
+            LateDestroy();
+        }
     }
 
 

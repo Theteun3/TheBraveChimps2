@@ -9,8 +9,11 @@ class Player1 : Player
     private float _rocketTimer;
     private int _rocketCooldown = 1;
 
+    private int _time;
+
     public Player1(TiledObject obj) : base()
     {
+        _time = obj.GetIntProperty("Time", 100);
         
     }
 
@@ -45,9 +48,16 @@ class Player1 : Player
 
     private void handleInput()
     {
-        if (Input.GetKey(Key.D))
+        speedX = MOVEMENTSPEED;
+
+        if (Input.GetKeyDown(Key.D) || Input.GetKeyUp(Key.D))
         {
-            speedX = MOVEMENTSPEED;
+            runSpeed = 1;
+        }
+
+        if (Input.GetKey(Key.D) && runSpeed < 3)
+        {
+            runSpeed += .1f;
         }
 
         if (Input.GetKey(Key.A))
@@ -68,6 +78,11 @@ class Player1 : Player
             if (isJumping) speedY -= JUMPFORCE;
         }
         else isJumping = false;
+    }
+
+    public int gameTime()
+    {
+        return _time;
     }
 
 }
