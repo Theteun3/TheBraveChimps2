@@ -11,7 +11,7 @@ class Level : GameObject
     private Player1 _player1;
     private Player2 _player2;
 
-    private List<Sprite> _tileObjects = new List<Sprite>();
+    public List<Sprite> _tileObjects = new List<Sprite>();
     private List<Lever> _levers = new List<Lever>();
     private List<Trapdoor> _doors= new List<Trapdoor>();
 
@@ -86,6 +86,7 @@ class Level : GameObject
         if (sprite is Trapdoor trapdoor)
         {
             _doors.Add(trapdoor);
+            trapdoor.addLevel(this);
             _tileObjects.Add(trapdoor);
         }
     }
@@ -202,7 +203,7 @@ class Level : GameObject
         float side;
         if (direction < 0) side = p.x - p.width * 2;
         else side = p.x + p.width * 2;
-        Rocket rocket = new Rocket(side, p.y - p.height / 10, p, direction, this);
+        Rocket rocket = new Rocket(side, p.y - p.height / 2, p, direction, this);
         AddChild(rocket);
     }
 
@@ -217,7 +218,7 @@ class Level : GameObject
         foreach (Sprite other in _tileObjects)
         {
             float deltaX = Mathf.Abs(other.x - subject.x);
-            if (deltaX < 100)
+            if (deltaX < 200)
             {
                 query.Add(other);
             }

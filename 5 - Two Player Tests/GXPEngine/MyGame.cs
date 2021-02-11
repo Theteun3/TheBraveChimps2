@@ -58,7 +58,7 @@ public class MyGame : Game
 		if (_level != null)
 		{
 			_fastEffect.alpha = _level.playerSpeed();
-            /*_fastEffect.scale = 1 / scale;*/
+            _fastEffect.scale = 1 / scale;
         }
 	}
 

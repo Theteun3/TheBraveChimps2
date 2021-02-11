@@ -301,7 +301,44 @@ namespace GXPEngine
 			get { return _alpha; }
 			set { _alpha = value; }
 		}
-		
+
+		public void ResolveCollision(Sprite subject, Sprite collider, float deltaX, float deltaY)
+		{
+			if (deltaX > 0)
+			{
+				subject.x = collider.x - subject.width;
+			}
+			if (deltaX < 0)
+			{
+				subject.x = collider.x + collider.width;
+			}
+			if (deltaY > 0)
+			{
+				subject.y = collider.y - subject.height;
+			}
+			if (deltaY < 0)
+			{
+				subject.y = collider.y + collider.height;
+			}
+		}
+
+		public bool MoveAndCollide(float deltaX, float deltaY, System.Collections.Generic.List<Sprite> colliders)
+		{
+			x += deltaX;
+			y += deltaY;
+			bool isHit = false;
+			foreach (Sprite other in colliders)
+			{
+				if (other.HitTest(this))
+				{
+					ResolveCollision(this, other, deltaX, deltaY);
+					isHit = true;
+				}
+			}
+			return !isHit;
+		}
+
+
 	}
 }
 

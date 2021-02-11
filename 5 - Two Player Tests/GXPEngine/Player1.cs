@@ -4,7 +4,6 @@ using TiledMapParser;
 class Player1 : Player
 {
 
-    
     private AnimationSprite _graphics;
 
     private float _rocketTimer;
@@ -22,14 +21,8 @@ class Player1 : Player
         AddChild(_graphics);
     }
 
-    
-
-
-
     private void Update()
     {
-        /*handleMovement();*/
-
         float oldX = x;
         handleJump();
         HandlePlayerStuff();
@@ -108,18 +101,16 @@ class Player1 : Player
 
     private void handleJump()
     {
-        /*if (Input.GetKeyDown(Key.W))
-        {
-            speedY = -21;
-        }*/
         if (Input.GetKeyDown(Key.W) && !isJumping && isGrounded)
         {
             isJumping = true;
+            
         }
 
         if (speedY > JUMPHEIGHT)
         {
             if (isJumping) speedY -= JUMPFORCE;
+            isGrounded = false;
         }
         else isJumping = false;
     }

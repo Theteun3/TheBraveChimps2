@@ -12,18 +12,6 @@ class Trap : AnimationSprite
     {
 
     }
-
-
-    public void OnCollision(GameObject other)
-    {
-        if (other is Rocket rocket)
-        {
-            isActivated = true;
-            rocket.isExploding = true;
-        }
-    }
-
-
 }
 
 class Lever : Trap
@@ -52,6 +40,7 @@ class Lever : Trap
     private void handleEffect()
     {
         currentFrame = 2;
+        door.removeFromList();
         door.LateDestroy();
     }
 
@@ -62,10 +51,23 @@ class Trapdoor : AnimationSprite
 {
 
     public int id;
+    private Level _level;
+
+    
 
     public Trapdoor(TiledObject obj) : base("SpriteSheets/PlayerCollision.png", 1, 1, -1, false, true)
     {
         id = obj.GetIntProperty("ID", 1);
+    }
+
+    public void addLevel(Level level)
+    {
+        _level = level;
+    }
+
+    public void removeFromList()
+    {
+        if (_level != null) _level._tileObjects.Remove(this);
     }
 }
 

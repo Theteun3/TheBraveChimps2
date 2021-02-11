@@ -24,7 +24,7 @@ class Rocket : AnimationSprite
     private void Update()
     {
         float oldX = x;
-        //if (!isExploding) MoveUntilCollision(_speed * Time.deltaTime,0, _level.getLevelColliders(this));//TODO:: ANDERE FUNCTIE MAKEN
+        if (!isExploding) x += _speed * Time.deltaTime ;//TODO:: ANDERE FUNCTIE MAKEN
         float dX = oldX - x;
 
         if (dX == 0 )
@@ -45,6 +45,26 @@ class Rocket : AnimationSprite
         if (currentFrame == 3 || Math.Abs(_player.x - x) > game.width / game.scale / 2)
         {
             LateDestroy();
+        }
+    }
+
+    public void OnCollision(GameObject other)
+    {
+        if (other is Trap trap)
+        {
+            trap.isActivated = true;
+            isExploding = true;
+        }
+
+        else if (other is Player p && !isExploding)
+        {
+            p.runSpeed = 1;
+            isExploding = true;
+        }
+
+        else
+        {
+            isExploding = true;
         }
     }
 }

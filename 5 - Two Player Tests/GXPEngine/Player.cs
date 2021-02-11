@@ -31,13 +31,13 @@ class Player : Sprite
 
     private Sprite RocketLauncher;
 
-    public Player() : base("SpriteSheets/PlayerCollisionT.png")
+    public Player() : base("SpriteSheets/PlayerCollision.png")
     {
         SetOrigin(width / 2, height / 2);
         RocketLauncher = new Sprite("Sprites/Rocketlauncher.png", false, false);
         RocketLauncher.scale = 3;
         RocketLauncher.y = -height / 4;
-        //AddChild(RocketLauncher);
+        AddChild(RocketLauncher);
     }
 
     public void AddParents(Level l)
@@ -78,6 +78,7 @@ class Player : Sprite
 
 
         speedX *= .90f;
+
     }
 
     private void handleStates()
@@ -95,42 +96,7 @@ class Player : Sprite
         else scaleX = RIGHT;
     }
 
-    void ResolveCollision(Sprite subject, Sprite collider, float deltaX, float deltaY)
-    {
-        if (deltaX > 0)
-        {
-            subject.x = collider.x - subject.width;
-        }
-        if (deltaX < 0)
-        {
-            subject.x = collider.x + collider.width;
-        }
-        if (deltaY > 0)
-        {
-            subject.y = collider.y - subject.height;
-        }
-        if (deltaY < 0)
-        {
-            subject.y = collider.y + collider.height;
-        }
-    }
-
-    public bool MoveAndCollide(float deltaX, float deltaY, List<Sprite> colliders)
-    {
-        x += deltaX;
-        y += deltaY;
-        bool isHit = false;
-        foreach (Sprite other in colliders)
-        {
-            if (other.HitTest(this))
-            {
-                ResolveCollision(this, other, deltaX, deltaY);
-                isHit = true;
-            }
-        }
-        return !isHit;
-    }
-
+    
     public float Facing()
     {
         return scaleX;
