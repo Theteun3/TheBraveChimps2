@@ -46,7 +46,7 @@
   </tile>
  </tileset>
  <tileset firstgid="781" name="RPGpack_sheet" tilewidth="64" tileheight="64" tilecount="260" columns="20">
-  <image source="C:/Users/tycht/OneDrive/Documenten/School/Game Programming/Sprites/SpriteSheets/RPGpack_sheet.png" width="1280" height="832"/>
+  <image source="SpriteSheets/RPGpack_sheet.png" width="1280" height="832"/>
   <tile id="11">
    <objectgroup draworder="index" id="2">
     <object id="1" x="5.1094" y="7.19101" width="51.094" height="48.4447">

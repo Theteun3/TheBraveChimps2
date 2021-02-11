@@ -7,24 +7,31 @@ public class MyGame : Game
 
 	private Level _level;
 	private HUD _hud;
+	private Sprite _fastEffect;
 
 	public float gameTime;
 
+	private float _screenShakeTimer = 0;
+
 	private string _currentLevel;
 
-	private string[] levelName = new string[3]
+	private string[] levelName = new string[4]
 	{
 		"TitleScreen.tmx",
 		"SingleplayerPrototype.tmx",
-		"PrototypeMap.tmx"
+		"PrototypeMap.tmx",
+		"PrototypeMap2.tmx"
 	};
 
 	public MyGame() : base(1920, 1080, false, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
 		_hud = new HUD();
-		LoadLevel(levelName[0]);
+		LoadLevel(levelName[3]);
 		scale = 0.5f;
 		targetFps = 60;
+		_fastEffect = new Sprite("Sprites/SpeedEffect.png", false, false);
+		_fastEffect.alpha = 0;
+		AddChild(_fastEffect);
     }
 
 	public GameObject GetLevel()
@@ -43,10 +50,16 @@ public class MyGame : Game
 		LateAddChild(_hud);
     }
 
-    void Update()
+    private void Update()
 	{
 		updateScale();
 		updateTime();
+		screenShake();
+		if (_level != null)
+		{
+			_fastEffect.alpha = _level.playerSpeed();
+            /*_fastEffect.scale = 1 / scale;*/
+        }
 	}
 
 	private void updateScale()
@@ -64,6 +77,26 @@ public class MyGame : Game
 		gameTime -= (float) (1f / (float) currentFps);
 
 	}
+
+	public void StartScreenShaking(int time)
+    {
+		_screenShakeTimer = time;
+    }
+
+	private void screenShake()
+    {
+		if (_screenShakeTimer > 0)
+        {
+			y += Utils.Random(-5, 5);
+			x += Utils.Random(-5, 5);
+			_screenShakeTimer -= 1f;
+		}
+        else
+        {
+			y = 0;
+			x = 0;
+        }
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{

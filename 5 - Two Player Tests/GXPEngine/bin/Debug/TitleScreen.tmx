@@ -6,13 +6,13 @@
  <objectgroup id="4" name="Object Layer 1">
   <object id="1" name="SPButton" type="LevelButton" x="800" y="512" width="320" height="72">
    <properties>
-    <property name="DisplayString" value="SinglePlayer"/>
+    <property name="DisplayString" value="SINGLEPLAYER"/>
     <property name="Level" value="SingleplayerPrototype.tmx"/>
    </properties>
   </object>
   <object id="2" name="SPButton" type="LevelButton" x="800" y="640" width="320" height="72">
    <properties>
-    <property name="DisplayString" value="Multiplayer"/>
+    <property name="DisplayString" value="MULTIPLAYER"/>
     <property name="Level" value="PrototypeMap.tmx"/>
    </properties>
   </object>

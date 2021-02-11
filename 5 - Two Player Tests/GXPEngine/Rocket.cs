@@ -5,10 +5,11 @@ using GXPEngine;
 class Rocket : AnimationSprite
 {
     private float _speed = 3f;
-    private bool _isExploding;
+    public bool isExploding;
     private Player _player;
+    private Level _level;
 
-    public Rocket(float newX, float newY, Player p, int rot) : base("SpriteSheets/RocketSheet.png", 4, 1)
+    public Rocket(float newX, float newY, Player p, int rot, Level l) : base("SpriteSheets/RocketSheet.png", 4, 1)
     {
         SetOrigin(width / 2, height / 2);
         _player = p;
@@ -17,25 +18,29 @@ class Rocket : AnimationSprite
         y = newY;
         rotation = rot;
         if (rot == -180) _speed *= -1;
+        _level = l;
     }
 
     private void Update()
     {
         float oldX = x;
-        MoveUntilCollision(_speed * Time.deltaTime,0);
+        //if (!isExploding) MoveUntilCollision(_speed * Time.deltaTime,0, _level.getLevelColliders(this));//TODO:: ANDERE FUNCTIE MAKEN
         float dX = oldX - x;
 
         if (dX == 0 )
         {
             Explode();
+            
         }
     }
 
     public void Explode()
     {
-        if (_isExploding) Animate();
-        _isExploding = true;
+        if (isExploding) Animate();
+        isExploding = true;
         SetCycle(1, 3);
+        if (currentFrame == 1) ((MyGame)game).StartScreenShaking(1);
+
 
         if (currentFrame == 3 || Math.Abs(_player.x - x) > game.width / game.scale / 2)
         {

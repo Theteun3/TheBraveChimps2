@@ -5,7 +5,13 @@ namespace GXPEngine.Core
 	public class BoxCollider : Collider
 	{
 		private Sprite _owner;
-		
+
+		public float x { get { return _owner.x - _owner.originX; } }
+		public float y{ get { return _owner.y - _owner.originY; } }
+		public float width { get { return _owner.width - 1; } }
+		public float height { get { return _owner.height - 1; } }
+
+
 		//------------------------------------------------------------------------------------------------------------------------
 		//														BoxCollider()
 		//------------------------------------------------------------------------------------------------------------------------		
@@ -16,14 +22,16 @@ namespace GXPEngine.Core
 		//------------------------------------------------------------------------------------------------------------------------
 		//														HitTest()
 		//------------------------------------------------------------------------------------------------------------------------		
-		public override bool HitTest (Collider other) {
-			if (other is BoxCollider) {
-				Vector2[] c = _owner.GetExtents();
-				if (c == null) return false;
-				Vector2[] d = ((BoxCollider)other)._owner.GetExtents();
-				if (d == null) return false;
-				if (!areaOverlap(c, d)) return false;
-				return areaOverlap(d, c);
+		public override bool HitTest (Collider target) {
+			if (target is BoxCollider) {
+				BoxCollider other = target as BoxCollider;
+				return Utils.RectsOverlap(x, y, width, height, other.x, other.y, other.width, other.height);
+				//Vector2[] c = _owner.GetExtents();
+				//if (c == null) return false;
+				//Vector2[] d = ((BoxCollider)other)._owner.GetExtents();
+				//if (d == null) return false;
+				//if (!areaOverlap(c, d)) return false;
+				//return areaOverlap(d, c);
 			} else {
 				return false;
 			}

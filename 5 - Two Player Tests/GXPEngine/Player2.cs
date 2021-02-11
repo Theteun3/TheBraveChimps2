@@ -7,7 +7,6 @@ class Player2 : Player
 
     private AnimationSprite _graphics;
 
-    private Level _level;
 
     private float _rocketTimer;
     private int _rocketCooldown = 1;
@@ -21,6 +20,7 @@ class Player2 : Player
         AddChild(_graphics);
     }
 
+
     private void Update()
     {
         handleJump();
@@ -30,10 +30,7 @@ class Player2 : Player
         handleShooting();
     }
 
-    public void AddParents(Level l)
-    {
-        _level = l;
-    }
+ 
 
     private void handleShooting()
     {
@@ -45,7 +42,7 @@ class Player2 : Player
         if (Input.GetMouseButtonDown(0) && _rocketTimer <= 0)
         {
             _rocketTimer = _rocketCooldown;
-            _level.CreateRocket(this, rot);
+            level.CreateRocket(this, rot);
         }
 
         if (_rocketTimer > 0) _rocketTimer -= .032f; ;

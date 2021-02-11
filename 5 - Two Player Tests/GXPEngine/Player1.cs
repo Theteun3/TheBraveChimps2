@@ -4,7 +4,7 @@ using TiledMapParser;
 class Player1 : Player
 {
 
-    private Level _level;
+    
     private AnimationSprite _graphics;
 
     private float _rocketTimer;
@@ -22,18 +22,23 @@ class Player1 : Player
         AddChild(_graphics);
     }
 
-    public void AddParents(Level l)
-    {
-        _level = l;
-    }
+    
+
+
 
     private void Update()
     {
+        /*handleMovement();*/
+
+        float oldX = x;
         handleJump();
         HandlePlayerStuff();
         handleInput();
         handleShooting();
         handleAnimation();
+        float deltaX = x - oldX;
+
+        if (deltaX == 0) runSpeed = 1;
     }
 
     private void handleAnimation()
@@ -60,6 +65,8 @@ class Player1 : Player
         _graphics.Animate();
     }
 
+    
+
     private void handleShooting()
     {
         int rot;
@@ -70,7 +77,7 @@ class Player1 : Player
         if (Input.GetKeyDown(Key.SPACE) && _rocketTimer <= 0)
         {
             _rocketTimer = _rocketCooldown;
-            _level.CreateRocket(this, rot);
+            level.CreateRocket(this, rot);
         }
 
         if (_rocketTimer > 0) _rocketTimer -= .032f; ;
@@ -93,7 +100,7 @@ class Player1 : Player
         if (Input.GetKey(Key.D))
         {
             speedX = MOVEMENTSPEED;
-            if (runSpeed < 3) runSpeed += .07f;
+            if (runSpeed < 3) runSpeed += .015f;
         }
 
 
@@ -101,6 +108,10 @@ class Player1 : Player
 
     private void handleJump()
     {
+        /*if (Input.GetKeyDown(Key.W))
+        {
+            speedY = -21;
+        }*/
         if (Input.GetKeyDown(Key.W) && !isJumping && isGrounded)
         {
             isJumping = true;

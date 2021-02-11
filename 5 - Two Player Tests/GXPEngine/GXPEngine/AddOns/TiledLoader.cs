@@ -50,6 +50,7 @@ namespace TiledMapParser {
 		public bool highQualityText;
 
 		public delegate void ObjectCreateCallback(Sprite sprite, TiledObject obj);
+		public delegate void TileCreateCallback(AnimationSprite sprite);
 		/// <summary>
 		/// This event is fired for each Tiled Object while reading object layers from the Tiled file.
 		/// It is fired whenever an AnimationSprite or text element (EasyDraw) is generated from a Tiled object.
@@ -59,6 +60,7 @@ namespace TiledMapParser {
 		/// that inherits from Sprite).
 		/// </summary>
 		public event ObjectCreateCallback OnObjectCreated;
+		public event TileCreateCallback OnTileCreated;
 
 		/// <summary>
 		/// Returns the number of tile layers in the loaded map.
@@ -428,6 +430,9 @@ namespace TiledMapParser {
 					ChangeOrigin(Tile, defaultOriginX, defaultOriginY, 0.5f, 0.5f);
 
 					rootObject.AddChild(Tile);
+
+					if (OnTileCreated != null && addColliders)
+						OnTileCreated(Tile);
 				}
 			}
 		}

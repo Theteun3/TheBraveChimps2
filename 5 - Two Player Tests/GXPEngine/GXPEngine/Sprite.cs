@@ -223,6 +223,16 @@ namespace GXPEngine
 			_bounds.x = -x;
 			_bounds.y = -y;
 		}
+
+		public float originX
+        {
+			get { return _bounds.x; }
+        }
+
+		public float originY
+        {
+			get { return _bounds.y; } 
+        }
 		
 		//------------------------------------------------------------------------------------------------------------------------
 		//														Mirror
