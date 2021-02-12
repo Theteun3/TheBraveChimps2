@@ -19,8 +19,8 @@ class Level : GameObject
 
     public int time;
 
-    private bool _isPlayer1MovingToOtherPlayer;
-    private bool _isPlayer2MovingToOtherPlayer;
+    public bool _isPlayer1MovingToOtherPlayer;
+    public bool _isPlayer2MovingToOtherPlayer;
     private bool _isTrapsInitialized;
 
     public Level(string levelName) : base()
@@ -37,7 +37,7 @@ class Level : GameObject
         level.OnTileCreated += Level_OnTileCreated;
         level.autoInstance = true;
 
-        //level.LoadTileLayers(0);
+        level.LoadTileLayers(0);
 
         
         level.LoadImageLayers();

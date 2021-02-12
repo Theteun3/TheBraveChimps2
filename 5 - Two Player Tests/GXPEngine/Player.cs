@@ -26,12 +26,12 @@ class Player : Sprite
     public float boostSpeed = 1f;
 
     public float _deltaY;
-    private int _health = 3;
+    public int _health = 4;
     
 
     private Sprite RocketLauncher;
 
-    public Player() : base("SpriteSheets/PlayerCollision.png")
+    public Player() : base("SpriteSheets/PlayerCollisionT.png")
     {
         SetOrigin(width / 2, height / 2);
         RocketLauncher = new Sprite("Sprites/Rocketlauncher.png", false, false);
@@ -73,7 +73,7 @@ class Player : Sprite
         if (MoveAndCollide(0, speedY * Time.deltaTime, level.getLevelColliders(this)) == false)
         {
             speedY = 0f;
-            isGrounded = true; // TODO FIX CLIPPING ON CEILING
+            isGrounded = true;
         }
 
 
@@ -87,7 +87,7 @@ class Player : Sprite
         else if (runSpeed < 1.5) playerState = State.WALKING;
         else playerState = State.RUNNING;
 
-        if (_deltaY < 0) playerState = State.JUMPING;
+        if (_deltaY != 0) playerState = State.JUMPING;
     }
 
     private void handleFacing()
@@ -107,26 +107,6 @@ class Player : Sprite
     {
         speedY += GRAVITY;
     }
-
-    public void TakeDamage()
-    {
-        _health--;
-
-        if (_health <= 0)
-        {
-            Console.WriteLine("A player has been killed");
-            /*LateDestroy();*/
-        }
-    }
-
-    /*public void OnCollision(GameObject other)
-    {
-        if (other is Rocket rocket)
-        {
-            runSpeed = 1;
-            rocket.isExploding = true;
-        }
-    }*/
 
 
 

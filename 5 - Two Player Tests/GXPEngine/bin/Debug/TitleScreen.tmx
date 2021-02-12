@@ -7,13 +7,15 @@
   <object id="1" name="SPButton" type="LevelButton" x="800" y="512" width="320" height="72">
    <properties>
     <property name="DisplayString" value="SINGLEPLAYER"/>
-    <property name="Level" value="SingleplayerPrototype.tmx"/>
+    <property name="Level" value="PrototypeMap3.tmx"/>
+    <property name="LevelNum" type="int" value="2"/>
    </properties>
   </object>
-  <object id="2" name="SPButton" type="LevelButton" x="800" y="640" width="320" height="72">
+  <object id="2" name="MPButton" type="LevelButton" x="800" y="640" width="320" height="72">
    <properties>
     <property name="DisplayString" value="MULTIPLAYER"/>
-    <property name="Level" value="PrototypeMap.tmx"/>
+    <property name="Level" value="PrototypeMap2.tmx"/>
+    <property name="LevelNum" type="int" value="1"/>
    </properties>
   </object>
  </objectgroup>

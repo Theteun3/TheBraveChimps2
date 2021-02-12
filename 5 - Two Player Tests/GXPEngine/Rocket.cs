@@ -24,7 +24,7 @@ class Rocket : AnimationSprite
     private void Update()
     {
         float oldX = x;
-        if (!isExploding) x += _speed * Time.deltaTime ;//TODO:: ANDERE FUNCTIE MAKEN
+        if (!isExploding) x += _speed * Time.deltaTime ;
         float dX = oldX - x;
 
         if (dX == 0 )

@@ -13,7 +13,7 @@ class Player2 : Player
 
     public Player2(TiledObject obj) : base()
     {
-        _graphics = new AnimationSprite("SpriteSheets/Player1.png", 8, 2, -1, false, false);
+        _graphics = new AnimationSprite("SpriteSheets/Character2.png", 8, 3, -1, false, false);
         _graphics.scaleX = 1;
         _graphics.x = -width;
         _graphics.y = -height * 1.25f;
@@ -24,7 +24,7 @@ class Player2 : Player
     private void Update()
     {
         handleJump();
-        HandlePlayerStuff();
+        if (!level._isPlayer2MovingToOtherPlayer) HandlePlayerStuff();
         handleInput();
         handleAnimation();
         handleShooting();
@@ -57,15 +57,16 @@ class Player2 : Player
                 break;
 
             case State.WALKING:
-                _graphics.SetCycle(8, 8, 8);
+                _graphics.SetCycle(0, 8, 8);
                 break;
 
             case State.RUNNING:
-                _graphics.SetCycle(1, 7, (byte)(16 / runSpeed));
+                _graphics.SetCycle(8, 8, (byte)(16 / runSpeed));
                 break;
 
             case State.JUMPING:
-                _graphics.SetCycle(0, 1);
+                if (_deltaY < 0) _graphics.SetCycle(19, 1);
+                if (_deltaY > 0) _graphics.SetCycle(20, 1);
                 break;
         }
 
@@ -102,8 +103,22 @@ class Player2 : Player
         if (speedY > JUMPHEIGHT)
         {
             if (isJumping) speedY -= JUMPFORCE;
+            isGrounded = false;
         }
         else isJumping = false;
+    }
+
+    public void TakeDamage()
+    {
+        _health--;
+
+        if (_health <= 0)
+        {
+            Console.WriteLine("A player has been killed");
+            ((MyGame)game).isFinished = true;
+            ((MyGame)game).winner = "ONE";
+            ((MyGame)game).LoadLevel(0);
+        }
     }
 
 }

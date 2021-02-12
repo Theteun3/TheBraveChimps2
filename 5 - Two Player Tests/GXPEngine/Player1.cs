@@ -14,7 +14,7 @@ class Player1 : Player
     public Player1(TiledObject obj) : base()
     {
         _time = obj.GetIntProperty("Time", 100);
-        _graphics = new AnimationSprite("SpriteSheets/Player1.png", 8, 2, -1, false, false);
+        _graphics = new AnimationSprite("SpriteSheets/Character1.png", 8, 3, -1, false, false);
         _graphics.scaleX = 1;
         _graphics.x = -width;
         _graphics.y = -height * 1.25f;
@@ -25,7 +25,7 @@ class Player1 : Player
     {
         float oldX = x;
         handleJump();
-        HandlePlayerStuff();
+        if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
         handleInput();
         handleShooting();
         handleAnimation();
@@ -43,18 +43,18 @@ class Player1 : Player
                 break;
 
             case State.WALKING:
-                _graphics.SetCycle(8, 8, 8);
+                _graphics.SetCycle(0, 8, 8);
                 break;
 
             case State.RUNNING:
-                _graphics.SetCycle(1, 7, (byte)(16 / runSpeed));
+                _graphics.SetCycle(8, 8, (byte)(16 / runSpeed));
                 break;
 
             case State.JUMPING:
-                _graphics.SetCycle(0, 1);
+                if (_deltaY < 0) _graphics.SetCycle(18, 1);
+                if (_deltaY > 0) _graphics.SetCycle(19, 1);
                 break;
         }
-
         _graphics.Animate();
     }
 
@@ -120,5 +120,18 @@ class Player1 : Player
         return _time;
     }
 
+
+    public void TakeDamage()
+    {
+        _health--;
+
+        if (_health <= 0)
+        {
+            Console.WriteLine("A player has been killed");
+            ((MyGame)game).isFinished = true;
+            ((MyGame)game).winner = "TWO";
+            ((MyGame)game).LoadLevel(0);
+        }
+    }
 }
 

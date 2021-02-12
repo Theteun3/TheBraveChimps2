@@ -44,10 +44,12 @@ class LevelButton : Button
 {
 
     private string _toLevel;
+    private int _toLevelNum;
 
     public LevelButton(TiledObject obj) : base()
     {
         _toLevel = obj.GetStringProperty("Level");
+        _toLevelNum = obj.GetIntProperty("LevelNum", 0);
         setString(obj.GetStringProperty("DisplayString"));
     }
 
@@ -68,7 +70,10 @@ class LevelButton : Button
 
     private void onClickEvent()
     {
-        ((MyGame)game).LoadLevel(_toLevel);
+       ((MyGame)game).gameTime = 0;
+       ((MyGame)game).LoadLevel(_toLevelNum);
+       ((MyGame)game).isFinished = false;
+       ((MyGame)game).winner = null;
     }
 
     

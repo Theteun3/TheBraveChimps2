@@ -10,23 +10,26 @@ public class MyGame : Game
 	private Sprite _fastEffect;
 
 	public float gameTime;
+	public bool isFinished;
+	public string winner;
 
 	private float _screenShakeTimer = 0;
 
-	private string _currentLevel;
+	private int _currentLevel = 0;
 
-	private string[] levelName = new string[4]
+	private string[] levelName = new string[5]
 	{
 		"TitleScreen.tmx",
-		"SingleplayerPrototype.tmx",
-		"PrototypeMap.tmx",
-		"PrototypeMap2.tmx"
+		"Multiplayer1.tmx",
+		"Singleplayer1.tmx",
+		"Multiplayer2.tmx",
+		"Singleplayer2.tmx"
 	};
 
 	public MyGame() : base(1920, 1080, false, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
 		_hud = new HUD();
-		LoadLevel(levelName[3]);
+		LoadLevel(_currentLevel);
 		scale = 0.5f;
 		targetFps = 60;
 		_fastEffect = new Sprite("Sprites/SpeedEffect.png", false, false);
@@ -39,12 +42,12 @@ public class MyGame : Game
 		return _level;
     }
 
-	public void LoadLevel(string level)
+	public void LoadLevel(int level)
     {
 		_currentLevel = level;
 		if (_level != null) _level.LateDestroy();
 		_hud.LateDestroy();
-		_level = new Level(_currentLevel);
+		_level = new Level(levelName[_currentLevel]);
 		_hud = new HUD();
 		LateAddChild(_level);
 		LateAddChild(_hud);
@@ -68,14 +71,8 @@ public class MyGame : Game
     }
 
 	private void updateTime()
-    {
-		if (_level != null && gameTime == 0)
-		{
-			gameTime = _level.totalGameTime();
-		}
-
-		gameTime -= (float) (1f / (float) currentFps);
-
+	{ 
+		if (_level.totalGameTime() != 0) gameTime += (float) (1f / (float) currentFps);
 	}
 
 	public void StartScreenShaking(int time)

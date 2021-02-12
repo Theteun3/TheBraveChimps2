@@ -8,9 +8,12 @@ class Finish : Sprite
     Player _player1;
     Player _player2;
 
+    private int _goToLevel;
+
     public Finish(TiledObject obj) : base("SpriteSheets/PlayerCollisionT.png", false, false)
     {
         SetOrigin(0, 0);
+        _goToLevel = obj.GetIntProperty("ToLevel", 0);
     }
 
     public void AddPlayer(Player player1)
@@ -31,6 +34,12 @@ class Finish : Sprite
             if (checkOverlap(_player1))
             {
                 Console.WriteLine("Player one has Won!");
+                ((MyGame)game).LoadLevel(_goToLevel);
+                if (_goToLevel == 0)
+                {
+                    ((MyGame)game).isFinished = true;
+                    ((MyGame)game).winner = "ONE";
+                }
             }
         }
 
@@ -38,7 +47,13 @@ class Finish : Sprite
         {
             if (checkOverlap(_player2))
             {
-                Console.WriteLine("Player one has Won!");
+                Console.WriteLine("Player two has Won!");
+                ((MyGame)game).LoadLevel(_goToLevel);
+                if (_goToLevel == 0)
+                {
+                    ((MyGame)game).isFinished = true;
+                    ((MyGame)game).winner = "TWO";
+                }
             }
         }
     }
