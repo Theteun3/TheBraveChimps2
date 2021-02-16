@@ -12,6 +12,7 @@ class Player2 : Player
     private int _rocketCooldown = 1;
 
     public bool isTutorial;
+    private bool _hasStepped;
 
     public Player2(TiledObject obj) : base()
     {
@@ -32,7 +33,7 @@ class Player2 : Player
         {
 
             handleJump();
-            if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
+            if (!level._isPlayer2MovingToOtherPlayer) HandlePlayerStuff();
             handleInput();
             handleShooting();
             handleAnimation();
@@ -42,12 +43,27 @@ class Player2 : Player
         }
         else handleTutorial();
 
+        handleSound();
+
         float deltaX = x - oldX;
         if (deltaX == 0 && runSpeed > 2) runSpeed = 2;
         else if (deltaX == 0) runSpeed = 1;
     }
 
- 
+    private void handleSound()
+    {
+        if (_graphics.currentFrame == 4 || _graphics.currentFrame == 12 || _graphics.currentFrame == 0 || _graphics.currentFrame == 8)
+            _hasStepped = false;
+
+        if (_graphics.currentFrame == 5 || _graphics.currentFrame == 13 || _graphics.currentFrame == 1 || _graphics.currentFrame == 9)
+        {
+            if (!_hasStepped)
+            {
+                PlayWalking(Utils.Random(1, 4));
+                _hasStepped = true;
+            }
+        }
+    }
 
     private void handleShooting()
     {
@@ -115,17 +131,19 @@ class Player2 : Player
         if (Input.GetKeyDown(Key.UP) && !isJumping && isGrounded)
         {
             isJumping = true;
+            _deltaY = -.1f;
         }
 
-        if (speedY > JUMPHEIGHT)
+        if (isJumping)
         {
-            if (isJumping)
+            if (speedY > JUMPHEIGHT && _deltaY != 0)
             {
                 speedY -= JUMPFORCE;
-                isGrounded = false;
             }
+            else isJumping = false;
         }
-        else isJumping = false;
+
+        if (_graphics.currentFrame == 18) playerState = State.JUMPING;
     }
 
     public void TakeDamage()

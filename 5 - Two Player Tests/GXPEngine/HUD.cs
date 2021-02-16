@@ -41,6 +41,19 @@ class HUD : EasyDraw
                 Text("DO NOT FALL BEHIND, OR YOU WILL BE RESORTED TO USE PRECIOUS FUEL", game.width / 2, game.height * .85f);
         }
 
+        ShapeAlign(CenterMode.Min, CenterMode.Min);
+        StrokeWeight(5);
+        Stroke(Color.DarkCyan);
+        Fill(Color.Cyan);
+        Rect(game.width / 40, game.height / 20, 4 * 50, 50);
+        Fill(Color.LightCyan);
+        Rect(game.width / 40, game.height / 20, 4 * 50, 50);
+
+        Stroke(Color.DeepPink);
+        Fill(Color.Magenta);
+        Rect(game.width * .875f, game.height / 20, 4 * 50, 50);
+        Fill(Color.HotPink);
+        Rect(game.width *.875f, game.height / 20, 4 * 50, 50);
     }
 
 

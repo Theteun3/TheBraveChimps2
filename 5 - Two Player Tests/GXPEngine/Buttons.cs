@@ -10,6 +10,12 @@ class Button : EasyDraw
 {
     PrivateFontCollection pfc = new PrivateFontCollection();
 
+    private Sound _menuClick = new Sound("Sounds/SFX/MenuClick.wav");
+    private Sound _menuHover = new Sound("Sounds/SFX/MenuHover.wav");
+
+    private bool _hasPlayedClickSound;
+    private bool _hasPlayedHoverSound;
+
     public Font drawFont;
     public string displayText;
 
@@ -20,9 +26,26 @@ class Button : EasyDraw
         drawFont = bigfont;
     }
 
-    private void Update()
+    public void Sounds()
     {
+        if (IsClicked())
+        {
+            if (!_hasPlayedClickSound)
+            {
+                _menuClick.Play();
+                _hasPlayedClickSound = true;
+            }
+        }
 
+        if (IsHover())
+        {
+            if (!_hasPlayedHoverSound)
+            {
+                _menuHover.Play(false, 0, 2);
+                _hasPlayedHoverSound = true;
+            }
+        }
+        else _hasPlayedHoverSound = false;
     }
 
     public void setString(string str)
@@ -47,6 +70,8 @@ class Button : EasyDraw
 
 class LevelButton : Button
 {
+    
+    
 
     private string _toLevel;
     private int _toLevelNum;
@@ -60,16 +85,20 @@ class LevelButton : Button
 
     private void Update()
     {
+        Sounds();
+
         if (IsClicked()) onClickEvent();
 
         graphics.Clear(Color.Empty);
         if (IsHover())
         {
             graphics.DrawString(displayText, drawFont, new SolidBrush(Color.CadetBlue), 0, 0);
+            
         }
         else
         {
             graphics.DrawString(displayText, drawFont, new SolidBrush(Color.Cyan), 0, 0);
+            
         }
     }
 

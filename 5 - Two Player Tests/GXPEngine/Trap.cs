@@ -19,6 +19,10 @@ class Lever : Trap
     Trapdoor door;
     public int id;
 
+    private Sound _doorOpen = new Sound("Sounds/SFX/DoorClose.wav");
+    private Sound _activateClick = new Sound("Sounds/SFX/LeverSwitch.wav");
+    private bool _hasPlayedSound;
+
     public Lever(TiledObject obj) : base("SpriteSheets/Lever.png", 2, 1, true)
     {
         id = obj.GetIntProperty("ID", 1);
@@ -40,6 +44,12 @@ class Lever : Trap
     private void handleEffect()
     {
         currentFrame = 2;
+        if (!_hasPlayedSound)
+        {
+            _activateClick.Play(false, 0, 10);
+            _doorOpen.Play();
+            _hasPlayedSound = true;
+        }
         door.removeFromList();
         door.LateDestroy();
     }

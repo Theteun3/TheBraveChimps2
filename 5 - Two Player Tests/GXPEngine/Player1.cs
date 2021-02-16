@@ -3,6 +3,7 @@ using GXPEngine;
 using TiledMapParser;
 class Player1 : Player
 {
+    
 
     private AnimationSprite _graphics;
 
@@ -13,6 +14,7 @@ class Player1 : Player
 
     public bool isTutorial;
     public bool moveCamera = true;
+    private bool _hasStepped;
 
 
     public Player1(TiledObject obj) : base()
@@ -33,17 +35,17 @@ class Player1 : Player
 
         if (!isTutorial)
         {
-            
             handleJump();
             if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
             handleInput();
             handleShooting();
             handleAnimation();
-            
-
-            
         }
         else handleTutorial();
+
+        handleSound();
+
+        
 
         float deltaX = x - oldX;
         if (deltaX == 0 && runSpeed > 2) runSpeed = 2;
@@ -108,10 +110,25 @@ class Player1 : Player
 
             case State.JUMPING:
                 if (_deltaY < 0) _graphics.SetCycle(18, 1);
-                if (_deltaY > 0) _graphics.SetCycle(19, 1);
+                else if (_deltaY > 0) _graphics.SetCycle(19, 1);
                 break;
         }
         _graphics.Animate();
+    }
+
+    private void handleSound()
+    {
+        if (_graphics.currentFrame == 4 || _graphics.currentFrame == 12 || _graphics.currentFrame == 0 || _graphics.currentFrame == 8) 
+            _hasStepped = false;
+
+        if (_graphics.currentFrame == 5|| _graphics.currentFrame == 13 || _graphics.currentFrame == 1 || _graphics.currentFrame == 9)
+        {
+            if (!_hasStepped)
+            {
+                PlayWalking(Utils.Random(1, 4));
+                _hasStepped = true;
+            }
+        }
     }
 
     
@@ -125,6 +142,7 @@ class Player1 : Player
 
         if (Input.GetKeyDown(Key.SPACE) && _rocketTimer <= 0)
         {
+            shot.Play();
             _rocketTimer = _rocketCooldown;
             level.CreateRocket(this, rot);
         }
@@ -171,8 +189,8 @@ class Player1 : Player
             }
             else isJumping = false;
         }
-        
 
+        if (_graphics.currentFrame == 18) playerState = State.JUMPING;
     }
 
     public int gameTime()

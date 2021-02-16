@@ -23,6 +23,8 @@ class Level : GameObject
     public bool _isPlayer2MovingToOtherPlayer;
     private bool _isTrapsInitialized;
 
+    private bool _hasPlayedSound;
+
     public Level(string levelName) : base()
     {
         _levelName = levelName;
@@ -158,23 +160,37 @@ class Level : GameObject
             {
                 _player2.TakeDamage();
                 _isPlayer2MovingToOtherPlayer = true;
+                
             }
             else
             {
                 _player1.TakeDamage();
                 _isPlayer1MovingToOtherPlayer = true;
             }
+            _hasPlayedSound = false;
         }
 
         if (_isPlayer1MovingToOtherPlayer)
         {
             _player1.x += REVIVE_SPEED * Time.deltaTime;
             _player1.y = _player2.y;
+            _player1.scaleX = 1;
+            if (!_hasPlayedSound)
+            {
+                _player1.boosting.Play();
+                _hasPlayedSound = true;
+            }
         }
         else if (_isPlayer2MovingToOtherPlayer)
         {
             _player2.x += REVIVE_SPEED * Time.deltaTime;
             _player2.y = _player1.y;
+            _player2.scaleX = 1;
+            if (!_hasPlayedSound)
+            {
+                _player2.boosting.Play();
+                _hasPlayedSound = true;
+            }
         }
 
         if (Math.Abs(_player1.x - _player2.x) < 300 )

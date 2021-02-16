@@ -14,6 +14,12 @@ class Player : Sprite
     private const float LEFT = -1f;
     private const float RIGHT = 1f;
 
+    public Sound walking1 = new Sound("Sounds/SFX/WalkVar1.wav");
+    public Sound walking2 = new Sound("Sounds/SFX/WalkVar2.wav");
+    public Sound walking3 = new Sound("Sounds/SFX/WalkVar3.wav");
+    public Sound shot = new Sound("Sounds/SFX/Rocket_Launch.wav");
+    public Sound boosting = new Sound("Sounds/SFX/Boost.wav");
+
     public Level level;
 
     public enum State { IDLE, WALKING, RUNNING, JUMPING };
@@ -130,6 +136,25 @@ class Player : Sprite
         return scaleX;
     }
 
+
+    public void PlayWalking(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                walking1.Play();
+                break;
+
+            case 2:
+                walking2.Play();
+                break;
+
+            case 3:
+                walking3.Play();
+                break;
+        }
+
+    }
 
     private void handleGravity()
     {

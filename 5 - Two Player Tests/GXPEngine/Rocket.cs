@@ -8,6 +8,10 @@ class Rocket : AnimationSprite
     public bool isExploding;
     private Player _player;
     private Level _level;
+    private bool hasPlayedSound = false;
+
+    private Sound _explosion = new Sound("Sounds/SFX/RocketExplosion.wav");
+
 
     public Rocket(float newX, float newY, Player p, int rot, Level l) : base("SpriteSheets/RocketSheet.png", 4, 1)
     {
@@ -38,6 +42,11 @@ class Rocket : AnimationSprite
     {
         if (isExploding) Animate();
         isExploding = true;
+        if (!hasPlayedSound)
+        {
+            _explosion.Play();
+            hasPlayedSound = true;
+        }
         SetCycle(1, 3);
         if (currentFrame == 1) ((MyGame)game).StartScreenShaking(1);
 
