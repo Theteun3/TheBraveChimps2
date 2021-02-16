@@ -48,7 +48,11 @@ public class MyGame : Game
 	public void LoadLevel(int level)
     {
 		_currentLevel = level;
-		if (_level != null) _level.LateDestroy();
+		if (_level != null)
+		{
+			_level.StopMusic();
+			_level.LateDestroy();
+		}
 		_hud.LateDestroy();
 		_level = new Level(levelName[_currentLevel]);
 		_hud = new HUD();
@@ -113,6 +117,18 @@ public class MyGame : Game
 		{
 			_currentLevel = value;
         }
+	}
+
+	public int getPlayer1Boost()
+    {
+		if (_level != null) return _level.getPlayer1Boost();
+		else return 0;
+    }
+
+	public int getPlayer2Boost()
+	{
+		if (_level != null) return _level.getPlayer2Boost();
+		else return 0;
 	}
 
 	static void Main()							// Main() is the first method that's called when the program is run

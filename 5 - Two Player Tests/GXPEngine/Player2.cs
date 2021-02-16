@@ -74,6 +74,7 @@ class Player2 : Player
 
         if (Input.GetMouseButtonDown(0) && _rocketTimer <= 0)
         {
+            shot.Play();
             _rocketTimer = _rocketCooldown;
             level.CreateRocket(this, rot);
         }

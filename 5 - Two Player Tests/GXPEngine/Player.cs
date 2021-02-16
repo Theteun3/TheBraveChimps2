@@ -5,6 +5,7 @@ using TiledMapParser;
 
 class Player : Sprite
 {
+    #region Variables
     public const float MOVEMENTSPEED = .6f;
     public const float JUMPFORCE = .5f;
     public const float JUMPHEIGHT = -1.8f;
@@ -40,13 +41,16 @@ class Player : Sprite
 
     public float _deltaY;
     public int _health = 4;
+    public int maxPlayerHealth = 4;
 
     private float slowTimer;
     private int slowTime = 1;
+    private bool _hasPlayedLandingSound;
+    private int _jumpCounter;
     
 
     private Sprite RocketLauncher;
-
+    #endregion
     public Player() : base("SpriteSheets/PlayerCollisionT.png")
     {
         SetOrigin(width / 2, height / 2);
@@ -142,15 +146,15 @@ class Player : Sprite
         switch (num)
         {
             case 1:
-                walking1.Play();
+                walking1.Play(false, 0, 0.2f);
                 break;
 
             case 2:
-                walking2.Play();
+                walking2.Play(false, 0, 0.2f);
                 break;
 
             case 3:
-                walking3.Play();
+                walking3.Play(false, 0, 0.2f);
                 break;
         }
 
@@ -159,6 +163,22 @@ class Player : Sprite
     private void handleGravity()
     {
         if (isGrounded) speedY = 0.1f;
+        else _hasPlayedLandingSound = false;
+
+
+
+
+        if (!_hasPlayedLandingSound && isGrounded)
+        {
+            _jumpCounter++;
+            if (_jumpCounter == 2)
+            {
+                _jumpCounter = 0;
+                walking1.Play(false, 0, 0.4f);
+                
+                _hasPlayedLandingSound = true;
+            }
+        }
 
         speedY += GRAVITY;
     }

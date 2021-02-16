@@ -25,11 +25,54 @@ class Level : GameObject
 
     private bool _hasPlayedSound;
 
+    private Sound _music;
+    private SoundChannel _musicChannel;
+
+    private int currentBoostP1;
+    private int currentBoostP2;
+
     public Level(string levelName) : base()
     {
         _levelName = levelName;
         generateLevel(_levelName);
+        playMusic(((MyGame)game).getCurrentLevel);
+    }
 
+    private void playMusic(int SongNum)
+    {
+        switch (SongNum + 1)
+        {
+            case 1:
+                _music = new Sound("Sounds/Title.mp3", true, false);
+                break;
+
+            case 2:
+                _music = new Sound("Sounds/Main.mp3", true, false);
+                break;
+
+            case 3:
+                _music = new Sound("Sounds/Main.mp3", true, false);
+                break;
+
+            case 4:
+                _music = new Sound("Sounds/Main.mp3", true, false);
+                break;
+
+            case 5:
+                _music = new Sound("Sounds/Main.mp3", true, false);
+                break;
+
+            case 6:
+                _music = new Sound("Sounds/Main.mp3", true, false);
+                break;
+        }
+
+        _musicChannel = _music.Play(false, 0, 0.1f);
+    }
+
+    public void StopMusic()
+    {
+        _musicChannel.Stop();
     }
 
     private void generateLevel(string levelName)
@@ -68,11 +111,14 @@ class Level : GameObject
             _player1 = player1;
             _player1.AddParents(this);
             time = _player1.gameTime();
+            currentBoostP1 = _player1.maxPlayerHealth * 50;
         }
         if (sprite is Player2 player2)
         {
             _player2 = player2;
+            currentBoostP2 = _player2.maxPlayerHealth * 50;
             player2.AddParents(this);
+            Console.WriteLine(currentBoostP2);
         }
 
         if (sprite is Finish finish && _player1 != null)
@@ -273,6 +319,26 @@ class Level : GameObject
         }
         else return 0;
 
+    }
+
+    public int getPlayer1Boost()
+    {
+        if (_player2 != null)
+        {
+            if (currentBoostP1 >= _player1._health * 50) currentBoostP1--;
+            return currentBoostP1;
+        }
+        else return 0;
+    }
+
+    public int getPlayer2Boost()
+    {
+        if (_player2 != null)
+        {
+            if (currentBoostP2 >= _player2._health * 50) currentBoostP2--;
+            return currentBoostP2;
+        }
+        else return 0;
     }
 }
 
