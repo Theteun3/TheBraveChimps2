@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Text;
 using GXPEngine;
 using TiledMapParser;
 
@@ -7,12 +8,16 @@ using TiledMapParser;
 
 class Button : EasyDraw
 {
-    public Font drawFont = new Font("Stay and Shine", 36, FontStyle.Regular);
+    PrivateFontCollection pfc = new PrivateFontCollection();
+
+    public Font drawFont;
     public string displayText;
 
     public Button() : base(256, 64)
     {
-
+        pfc.AddFontFile("StayAndShine.ttf");
+        System.Drawing.Font bigfont = new Font(pfc.Families[0], 36);
+        drawFont = bigfont;
     }
 
     private void Update()
@@ -72,7 +77,8 @@ class LevelButton : Button
     {
        ((MyGame)game).gameTime = 0;
        ((MyGame)game).LoadLevel(_toLevelNum);
-       ((MyGame)game).isFinished = false;
+        ((MyGame)game).getCurrentLevel = _toLevelNum;
+        ((MyGame)game).isFinished = false;
        ((MyGame)game).winner = null;
     }
 

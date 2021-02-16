@@ -12,18 +12,21 @@ public class MyGame : Game
 	public float gameTime;
 	public bool isFinished;
 	public string winner;
+	public string tutorialText;
 
 	private float _screenShakeTimer = 0;
-
 	private int _currentLevel = 0;
 
-	private string[] levelName = new string[5]
+	
+
+	private string[] levelName = new string[6]
 	{
 		"TitleScreen.tmx",
 		"Multiplayer1.tmx",
 		"Singleplayer1.tmx",
 		"Multiplayer2.tmx",
-		"Singleplayer2.tmx"
+		"Singleplayer2.tmx",
+		"Tutorial.tmx"
 	};
 
 	public MyGame() : base(1920, 1080, false, false)		// Create a window that's 800x600 and NOT fullscreen
@@ -62,7 +65,11 @@ public class MyGame : Game
 		{
 			_fastEffect.alpha = _level.playerSpeed();
             _fastEffect.scale = 1 / scale;
-        }
+			tutorialText = _level.handleTutorialLevel();
+
+		}
+
+		
 	}
 
 	private void updateScale()
@@ -94,6 +101,19 @@ public class MyGame : Game
 			x = 0;
         }
     }
+
+	public int getCurrentLevel
+	{
+        get
+		{
+			return _currentLevel;
+        }
+
+        set
+		{
+			_currentLevel = value;
+        }
+	}
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{

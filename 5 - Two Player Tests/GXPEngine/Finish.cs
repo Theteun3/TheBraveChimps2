@@ -34,26 +34,26 @@ class Finish : Sprite
             if (checkOverlap(_player1))
             {
                 Console.WriteLine("Player one has Won!");
-                ((MyGame)game).LoadLevel(_goToLevel);
-                if (_goToLevel == 0)
+                if (_goToLevel == 0 && ((MyGame)game).getCurrentLevel != 5)
                 {
                     ((MyGame)game).isFinished = true;
                     ((MyGame)game).winner = "ONE";
                 }
+                ((MyGame)game).LoadLevel(_goToLevel);
             }
         }
-
+        
         if (_player2 != null)
         {
             if (checkOverlap(_player2))
             {
                 Console.WriteLine("Player two has Won!");
-                ((MyGame)game).LoadLevel(_goToLevel);
-                if (_goToLevel == 0)
+                if (_goToLevel == 0 && ((MyGame)game).getCurrentLevel != 5)
                 {
                     ((MyGame)game).isFinished = true;
                     ((MyGame)game).winner = "TWO";
                 }
+                ((MyGame)game).LoadLevel(_goToLevel);
             }
         }
     }

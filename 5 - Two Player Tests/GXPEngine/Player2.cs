@@ -11,9 +11,12 @@ class Player2 : Player
     private float _rocketTimer;
     private int _rocketCooldown = 1;
 
+    public bool isTutorial;
+
     public Player2(TiledObject obj) : base()
     {
         _graphics = new AnimationSprite("SpriteSheets/Character2.png", 8, 3, -1, false, false);
+        isTutorial = obj.GetBoolProperty("IsTutorial", false);
         _graphics.scaleX = 1;
         _graphics.x = -width;
         _graphics.y = -height * 1.25f;
@@ -23,11 +26,25 @@ class Player2 : Player
 
     private void Update()
     {
-        handleJump();
-        if (!level._isPlayer2MovingToOtherPlayer) HandlePlayerStuff();
-        handleInput();
-        handleAnimation();
-        handleShooting();
+        float oldX = x;
+
+        if (!isTutorial)
+        {
+
+            handleJump();
+            if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
+            handleInput();
+            handleShooting();
+            handleAnimation();
+
+
+
+        }
+        else handleTutorial();
+
+        float deltaX = x - oldX;
+        if (deltaX == 0 && runSpeed > 2) runSpeed = 2;
+        else if (deltaX == 0) runSpeed = 1;
     }
 
  
@@ -89,7 +106,7 @@ class Player2 : Player
         if (Input.GetKey(Key.RIGHT))
         {
             speedX = MOVEMENTSPEED;
-            if (runSpeed < 3) runSpeed += .07f;
+            if (runSpeed < RUNSPEED && isGrounded) runSpeed += MOMENTUMGAIN;
         }
     }
 
@@ -102,15 +119,19 @@ class Player2 : Player
 
         if (speedY > JUMPHEIGHT)
         {
-            if (isJumping) speedY -= JUMPFORCE;
-            isGrounded = false;
+            if (isJumping)
+            {
+                speedY -= JUMPFORCE;
+                isGrounded = false;
+            }
         }
         else isJumping = false;
     }
 
     public void TakeDamage()
     {
-        _health--;
+        if (!isTutorial) _health--;
+        justDied = true;
 
         if (_health <= 0)
         {
@@ -119,6 +140,45 @@ class Player2 : Player
             ((MyGame)game).winner = "ONE";
             ((MyGame)game).LoadLevel(0);
         }
+    }
+
+    private void handleTutorial()
+    {
+        switch (_tutorialState)
+        {
+            case TutorialState.RUNNING:
+                HandlePlayerStuff();
+                handleInput();
+                if (Input.GetKeyDown(Key.A) || Input.GetKeyDown(Key.D) || Input.GetKeyDown(Key.LEFT) || Input.GetKeyDown(Key.RIGHT))
+                    _tutorialState = TutorialState.JUMPING;
+                break;
+
+            case TutorialState.JUMPING:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                if (Input.GetKeyDown(Key.W) || Input.GetKeyDown(Key.UP))
+                    _tutorialState = TutorialState.SHOOTING;
+                break;
+
+            case TutorialState.SHOOTING:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                handleShooting();
+                if (Input.GetKeyDown(Key.SPACE) || Input.GetMouseButtonDown(0))
+                    _tutorialState = TutorialState.SHOOTING;
+                break;
+
+            case TutorialState.LEVER:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                handleShooting();
+                break;
+        }
+
+        handleAnimation();
     }
 
 }

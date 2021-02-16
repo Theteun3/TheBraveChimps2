@@ -36,6 +36,7 @@ class Level : GameObject
         level.OnObjectCreated += Level_OnObjectCreated;
         level.OnTileCreated += Level_OnTileCreated;
         level.autoInstance = true;
+        
 
         level.LoadTileLayers(0);
 
@@ -95,12 +96,15 @@ class Level : GameObject
     {
         if (_player1 != null)
         {
-            moveCamera();
+            if (_player1.moveCamera) moveCamera();
             if (_player2 != null)
             {
+                if (_player2.isTutorial) handleTutorialLevel();
                 killPlayer();
                 boostLastPlayer();
             }
+
+            
         }
         else
         {
@@ -136,10 +140,9 @@ class Level : GameObject
     {
         if (_player1 != null && _player2 != null)
         {
-            float distance = Math.Abs(_player1.x - _player2.x) / 12000;
+            float distance = Math.Abs(_player1.x - _player2.x) / 36000;
             float scale = 0.5f - distance;
-
-
+            if (scale > 0.475f) return 0.475f;
             if (scale > 0.4f) return scale;
             else return 0.4f;
         }
@@ -195,8 +198,26 @@ class Level : GameObject
         }
     }
 
-
-
+    public string handleTutorialLevel()
+    {
+        if (_player1 != null && _player2 != null) 
+        {
+            if (_player1.isTutorial)
+            {
+                if (_player1._tutorialState == Player.TutorialState.RUNNING) 
+                    return "PLAYER ONE CAN MOVE WITH A & D, PLAYER TWO WITH LEFT & RIGHT";
+                if (_player1._tutorialState == Player.TutorialState.JUMPING)
+                    return "PLAYER ONE CAN JUMP WITH W, PLAYER TWO WITH UP";
+                if (_player1._tutorialState == Player.TutorialState.SHOOTING)
+                    return "PLAYER ONE CAN SHOOT WITH SPACE, PLAYER TWO WITH LEFT MOUSE CLICK";
+                if (_player1._tutorialState == Player.TutorialState.LEVER)
+                    return "SHOOT LEVERS AND TRAPS TO ACTIVATE THEM. REACH THE END TO FINISH THE LEVEL!";
+                else return "";
+            }
+            else return "";
+        }
+        else return "";
+    }
 
     public void CreateRocket(Player p, int direction)
     {

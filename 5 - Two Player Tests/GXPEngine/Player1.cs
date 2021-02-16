@@ -11,9 +11,15 @@ class Player1 : Player
 
     private int _time;
 
+    public bool isTutorial;
+    public bool moveCamera = true;
+
+
     public Player1(TiledObject obj) : base()
     {
         _time = obj.GetIntProperty("Time", 100);
+        isTutorial = obj.GetBoolProperty("IsTutorial", false);
+        if (isTutorial == true) moveCamera = false;
         _graphics = new AnimationSprite("SpriteSheets/Character1.png", 8, 3, -1, false, false);
         _graphics.scaleX = 1;
         _graphics.x = -width;
@@ -24,14 +30,64 @@ class Player1 : Player
     private void Update()
     {
         float oldX = x;
-        handleJump();
-        if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
-        handleInput();
-        handleShooting();
-        handleAnimation();
-        float deltaX = x - oldX;
 
-        if (deltaX == 0) runSpeed = 1;
+        if (!isTutorial)
+        {
+            
+            handleJump();
+            if (!level._isPlayer1MovingToOtherPlayer) HandlePlayerStuff();
+            handleInput();
+            handleShooting();
+            handleAnimation();
+            
+
+            
+        }
+        else handleTutorial();
+
+        float deltaX = x - oldX;
+        if (deltaX == 0 && runSpeed > 2) runSpeed = 2;
+        else if (deltaX == 0) runSpeed = 1;
+    }
+
+    private void handleTutorial()
+    {
+        switch (_tutorialState)
+        {
+            case TutorialState.RUNNING:
+                HandlePlayerStuff();
+                handleInput();
+                if (Input.GetKeyDown(Key.A) || Input.GetKeyDown(Key.D) || Input.GetKeyDown(Key.LEFT) || Input.GetKeyDown(Key.RIGHT))
+                    _tutorialState = TutorialState.JUMPING;
+                break;
+
+            case TutorialState.JUMPING:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                if (Input.GetKeyDown(Key.W) || Input.GetKeyDown(Key.UP))
+                    _tutorialState = TutorialState.SHOOTING;
+                break;
+
+            case TutorialState.SHOOTING:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                handleShooting();
+                if (Input.GetKeyDown(Key.SPACE) || Input.GetMouseButtonDown(0))
+                    _tutorialState = TutorialState.LEVER;
+                break;
+
+            case TutorialState.LEVER:
+                handleJump();
+                HandlePlayerStuff();
+                handleInput();
+                handleShooting();
+                moveCamera = true;
+                break;
+        }
+
+        handleAnimation();
     }
 
     private void handleAnimation()
@@ -93,7 +149,7 @@ class Player1 : Player
         if (Input.GetKey(Key.D))
         {
             speedX = MOVEMENTSPEED;
-            if (runSpeed < 3) runSpeed += .015f;
+            if (runSpeed < RUNSPEED && isGrounded) runSpeed += MOMENTUMGAIN;
         }
 
 
@@ -104,15 +160,19 @@ class Player1 : Player
         if (Input.GetKeyDown(Key.W) && !isJumping && isGrounded)
         {
             isJumping = true;
-            
+            _deltaY = -.1f;
         }
 
-        if (speedY > JUMPHEIGHT)
+        if (isJumping)
         {
-            if (isJumping) speedY -= JUMPFORCE;
-            isGrounded = false;
+            if (speedY > JUMPHEIGHT && _deltaY != 0)
+            {
+                speedY -= JUMPFORCE;
+            }
+            else isJumping = false;
         }
-        else isJumping = false;
+        
+
     }
 
     public int gameTime()
@@ -123,7 +183,8 @@ class Player1 : Player
 
     public void TakeDamage()
     {
-        _health--;
+        if (!isTutorial) _health--;
+        justDied = true;
 
         if (_health <= 0)
         {
